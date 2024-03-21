@@ -4,13 +4,10 @@ from src.delete_secret import delete_secret
 import pytest
 import boto3
 import json
-import os
-import re
-from pprint import pprint
 
 
 @pytest.mark.describe("delete secret")
-@pytest.mark.it("tests that it deletes given secret when only one secret in secretmanager")
+@pytest.mark.it("tests it deletes given secret when only one secret stored")
 @mock_aws
 def test_deletes_secret():
     secrets = boto3.client('secretsmanager')
@@ -37,7 +34,7 @@ def test_deletes_secret():
 
 
 @pytest.mark.describe("delete secret")
-@pytest.mark.it("tests that it deletes given secret when mutiple secrets in secretmanager")
+@pytest.mark.it("tests it deletes given secret when mutiple secrets stored")
 @mock_aws
 def test_deletes_secret_when_mutiple():
     secrets = boto3.client('secretsmanager')
@@ -73,7 +70,7 @@ def test_deletes_secret_when_mutiple():
 
 
 @pytest.mark.describe("delete_secret")
-@pytest.mark.it("test prints appropriate message if secret name does not exist")
+@pytest.mark.it("test prints correct message if secret name does not exist")
 @patch("builtins.print")
 @mock_aws
 def test_user_does_not_have_secret_with_this_name(mock_print):
@@ -83,11 +80,12 @@ def test_user_does_not_have_secret_with_this_name(mock_print):
         "A secret with that name does not exist, start again.")
 
 
-# @pytest.mark.describe("delete_secret")
-# @pytest.mark.it("test try to delete secret with invalid name")
-# @patch("builtins.print")
-# def test_invalid_name(mock_print):
-#     secrets = boto3.client('secretsmanager')
-#     delete_secret(secrets, '!$*&(){£$%£}')
-#     mock_print.assert_called_with(
-#         "A secret with that name does not exist, start again.")
+@pytest.mark.describe("delete_secret")
+@pytest.mark.it("test try to delete secret with invalid name")
+@patch("builtins.print")
+@mock_aws
+def test_invalid_name(mock_print):
+    secrets = boto3.client('secretsmanager')
+    delete_secret(secrets, '!$*&(){£$%£}')
+    mock_print.assert_called_with(
+        "A secret with that name does not exist, start again.")

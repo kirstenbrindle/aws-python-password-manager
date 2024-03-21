@@ -40,10 +40,24 @@ def test_user_does_not_already_have_secret_with_this_name(mock_print):
         "A secret with this name already exists, start again!")
 
 
+'''These last two tests have highlighted that mock_aws does not behave
+in the same way as AWS in all cases:
+
+    AWS Secrets Manager will inform the user that a secret cannot be created
+    if a secret with that name is scheduled for deletion, but mock_aws
+    would show the message that a secret with that name already exists.
+
+    Also AWS Secrets Manager will not let the user create a secret with
+    invalid characters (valid characters are alphanumeric characters, or
+    any of the following: -/_+=.@!) but mock_aws will allow this.
+'''
+
+
 @pytest.mark.describe("create_secret")
 @pytest.mark.it("test secret name has not just been deleted")
 @patch("builtins.print")
-def test_user_does_not_already_have_secret_with_this_name_staged_for_deletion(mock_print):
+@mock_aws
+def test_user_does_not_already_have_secret_staged_for_deletion(mock_print):
     secrets = boto3.client('secretsmanager')
     secret_name = 'Missile_Launch_Codes'
     user_id = 'bidenj'
@@ -54,12 +68,14 @@ def test_user_does_not_already_have_secret_with_this_name_staged_for_deletion(mo
     )
     create_secret(secrets, secret_name, user_id, password)
     mock_print.assert_called_with(
-        "You can't create this secret because a secret with this name is already scheduled for deletion, start again!")
+        "You can't create this secret because a secret with this name is "
+        "already scheduled for deletion, start again!")
 
 
 @pytest.mark.describe("create_secret")
 @pytest.mark.it("test try to create secret with invalid name")
 @patch("builtins.print")
+@mock_aws
 def test_invalid_name(mock_print):
     secrets = boto3.client('secretsmanager')
     secret_name = '!$*&(){£$%£}'
@@ -67,4 +83,5 @@ def test_invalid_name(mock_print):
     password = 'Pa55word'
     create_secret(secrets, secret_name, user_id, password)
     mock_print.assert_called_with(
-        'Invalid name. Must be a valid name containing alphanumeric characters, or any of the following: -/_+=.@!, start again!')
+        'Invalid name. Must be a valid name containing alphanumeric characters'
+        ', or any of the following: -/_+=.@!, start again!')

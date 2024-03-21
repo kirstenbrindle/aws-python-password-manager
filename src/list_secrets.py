@@ -1,6 +1,3 @@
-import boto3
-
-
 def list_secrets(secrets):
     response = secrets.list_secrets()
     num_of_secrets = len(response["SecretList"])

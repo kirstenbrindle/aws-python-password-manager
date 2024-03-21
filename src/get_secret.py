@@ -1,4 +1,3 @@
-import boto3
 import json
 
 
@@ -9,7 +8,8 @@ def get_secret(secrets, secret_name):
         )
         secret_string = json.loads(response['SecretString'])
 
-        data = f'UserId: {secret_string["UserId"]} \nPassword: {secret_string["Password"]}'
+        data = (f'UserId: {secret_string["UserId"]} \n'
+                f'Password: {secret_string["Password"]}')
 
         with open('./Top_secret/secrets.txt', 'w', encoding='utf-8') as f:
             f.write(data)

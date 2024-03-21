@@ -4,8 +4,6 @@ from src.list_secrets import list_secrets
 import pytest
 import boto3
 import json
-import os
-import re
 
 
 @pytest.mark.describe("list_secrets")
@@ -54,7 +52,8 @@ def test_mutiple_secrets(mock_print):
     )
     list_secrets(secrets)
     mock_print.assert_called_with(
-        "2 secret(s) available \nMissile_Launch_Codes, NEW_Missile_Launch_Codes")
+        "2 secret(s) available \nMissile_Launch_Codes, "
+        "NEW_Missile_Launch_Codes")
 
 
 @pytest.mark.describe("list_secrets")

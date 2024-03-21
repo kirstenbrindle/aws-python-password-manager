@@ -5,7 +5,6 @@ import pytest
 import boto3
 import json
 import os
-import re
 
 
 @pytest.mark.describe("get_secret")
@@ -50,7 +49,7 @@ def test_file_with_correct_secret_data_has_been_created():
 
 
 @pytest.mark.describe("get_secret")
-@pytest.mark.it("function overwrites previous secret in text file when new one retrieved")
+@pytest.mark.it("function overwrites secret in file when new one retrieved")
 @mock_aws
 def test_overwrites_previous():
     secrets = boto3.client('secretsmanager')
@@ -88,7 +87,7 @@ def test_overwrites_previous():
 
 
 @pytest.mark.describe("get_secret")
-@pytest.mark.it("function prints correct message if input secret does not exist")
+@pytest.mark.it("prints correct message if input secret does not exist")
 @patch("builtins.print")
 @mock_aws
 def test_secret_does_not_exist(mock_print):
@@ -122,7 +121,7 @@ def test_user_has_deleted_this_secret(mock_print):
 
 
 @pytest.mark.describe("get_secret")
-@pytest.mark.it("test try to get secret with invalid name prints correct message")
+@pytest.mark.it("try to get secret with invalid name prints correct message")
 @patch("builtins.print")
 @mock_aws
 def test_invalid_name(mock_print):

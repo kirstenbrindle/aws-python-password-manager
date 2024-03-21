@@ -1,6 +1,3 @@
-import boto3
-
-
 def delete_secret(secrets, secret_name):
     try:
         secrets.delete_secret(

@@ -2,10 +2,6 @@ from moto import mock_aws
 from unittest.mock import patch, call
 from src.password_manager import password_manager
 import pytest
-import boto3
-import json
-import os
-import re
 
 
 @pytest.mark.describe("password_manager")
@@ -15,7 +11,8 @@ import re
 def tests_correct_starting_user_prompt(mock_input):
     password_manager()
     mock_input.assert_called_with(
-        "Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: ")
+        "Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or "
+        "e[x]it: ")
 
 
 @pytest.mark.describe("password_manager")
@@ -29,26 +26,34 @@ def tests_exit(mock_print, mock_input):
 
 
 @pytest.mark.describe("password_manager")
-@pytest.mark.it("tests that it prints correct message for invalid input and confirm that it recalls the function")
+@pytest.mark.it("tests that it prints correct message for invalid input "
+                "and confirm that it recalls the function")
 @patch('builtins.input', side_effect=['i', 'x'])
 @patch('builtins.print')
 @mock_aws
 def tests_invalid_input_message(mock_print, mock_input):
     password_manager()
     mock_input.assert_called_with(
-        "Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: ")
+        "Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or "
+        "e[x]it: ")
     mock_print.assert_has_calls(
         [call("Invalid input."), call("Thank you, goodbye.")])
 
 
 @pytest.mark.describe("password_manager")
 @pytest.mark.it("if input = e, correct prompts show")
-@patch('builtins.input', side_effect=['e', "Missile_launch_codes", "bidenj", "Pa55word", 'x'])
+@patch('builtins.input', side_effect=['e', "Missile_launch_codes",
+                                      "bidenj", "Pa55word", 'x'])
 @mock_aws
 def tests_input_prompt_e(mock_input):
     password_manager()
     mock_input.assert_has_calls(
-        [call("Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: "), call("Secret identifier: "), call("UserId: "), call("Password: "), call("Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: ")])
+        [call(
+            "Please specify [e]ntry, [r]etrieval, [d]eletion, "
+            "[l]isting or e[x]it: "),
+         call("Secret identifier: "), call("UserId: "), call("Password: "),
+         call("Please specify [e]ntry, [r]etrieval, [d]eletion, "
+              "[l]isting or e[x]it: ")])
 
 
 @pytest.mark.describe("password_manager")
@@ -60,7 +65,11 @@ def tests_input_prompt_e(mock_input):
 def tests_input_prompt_r(mock_get_secret, mock_print, mock_input):
     password_manager()
     mock_input.assert_has_calls(
-        [call("Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: "), call("Specify secret to retrieve: "), call("Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: ")])
+        [call("Please specify [e]ntry, [r]etrieval, [d]eletion, "
+              "[l]isting or e[x]it: "),
+         call("Specify secret to retrieve: "),
+         call("Please specify [e]ntry, [r]etrieval, [d]eletion, "
+              "[l]isting or e[x]it: ")])
 
 
 @pytest.mark.describe("password_manager")
@@ -72,7 +81,11 @@ def tests_input_prompt_r(mock_get_secret, mock_print, mock_input):
 def tests_input_prompt_d(mock_delete_secret, mock_print, mock_input):
     password_manager()
     mock_input.assert_has_calls(
-        [call("Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: "), call("Specify secret to delete: "), call("Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: ")])
+        [call("Please specify [e]ntry, [r]etrieval, [d]eletion, "
+              "[l]isting or e[x]it: "),
+         call("Specify secret to delete: "),
+         call("Please specify [e]ntry, [r]etrieval, [d]eletion, "
+              "[l]isting or e[x]it: ")])
 
 
 @pytest.mark.describe("password_manager")
@@ -87,7 +100,8 @@ def tests_input_prompt_l_functionality(mock_list_secrets, mock_input):
 
 @pytest.mark.describe("password_manager")
 @pytest.mark.it("if input = e, create secrets function is called")
-@patch('builtins.input', side_effect=['e', "Missile_launch_codes", "bidenj", "Pa55word", 'x'])
+@patch('builtins.input', side_effect=['e', "Missile_launch_codes",
+                                      "bidenj", "Pa55word", 'x'])
 @patch("src.password_manager.create_secret")
 @mock_aws
 def tests_input_prompt_e_functionality(mock_create_secret, mock_input):
@@ -110,6 +124,6 @@ def tests_input_prompt_r_functionality(mock_get_secret, mock_input):
 @patch('builtins.input', side_effect=['d', "Missile_launch_codes", "x"])
 @patch("src.password_manager.delete_secret")
 @mock_aws
-def tests_input_prompt_r_functionality(mock_delete_secret, mock_input):
+def tests_input_prompt_d_functionality(mock_delete_secret, mock_input):
     password_manager()
     assert mock_delete_secret.call_count == 1
