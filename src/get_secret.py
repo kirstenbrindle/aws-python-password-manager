@@ -2,6 +2,19 @@ import json
 
 
 def get_secret(secrets, secret_name):
+    """
+    This function takes a boto3 Secrets Manager client and name of a
+    secret. The function retrieves the specified secret from Secrets
+    Manager and saves the contents to a local text file.
+
+    Args:
+        `secrets`: Secrets Manager boto3 client
+        `secret_name`: string of secret name
+    ---------------------------
+
+    Returns:
+        No return value.
+    """
     try:
         response = secrets.get_secret_value(
             SecretId=secret_name,

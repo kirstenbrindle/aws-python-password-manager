@@ -2,6 +2,21 @@ import json
 
 
 def create_secret(secrets, secret_name, user_id, password):
+    """
+    This function takes a boto3 Secrets Manager client, name of a
+    secret, user id and password. The function creates a secret
+    in AWS Secrets Manager, storing the user id and password.
+
+    Args:
+        `secrets`: Secrets Manager boto3 client
+        `secret_name`: string of secret name
+        `user_id`: string of user id
+        `password`: string of password
+    ---------------------------
+
+    Returns:
+        No return value.
+    """
     try:
         secret_string = {
             "UserId": user_id,

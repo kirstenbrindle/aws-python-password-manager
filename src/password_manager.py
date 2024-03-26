@@ -6,6 +6,18 @@ from src.delete_secret import delete_secret
 
 
 def password_manager():
+    """
+    This function is a command-line application which allows the user to
+    interact with Secrets Manager to create, delete, list and retrieve
+    secrets.
+
+    Args:
+        No arguments.
+    ---------------------------
+
+    Returns:
+        No return value.
+    """
     secrets = boto3.client('secretsmanager')
 
     initial_input = input(
