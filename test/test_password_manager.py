@@ -9,6 +9,13 @@ import pytest
 @patch('builtins.input', return_value='x')
 @mock_aws
 def tests_correct_starting_user_prompt(mock_input):
+    """
+    Given:
+    Function is first invoked
+
+    Returns:
+    Correct initial input prompt is printed
+    """
     password_manager()
     mock_input.assert_called_with(
         "Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or "
@@ -21,6 +28,13 @@ def tests_correct_starting_user_prompt(mock_input):
 @patch('builtins.print')
 @mock_aws
 def tests_exit(mock_print, mock_input):
+    """
+    Given:
+    Function is first invoked and user inputs x
+
+    Returns:
+    Correct exit message is printed
+    """
     password_manager()
     mock_print.assert_called_with("Thank you, goodbye.")
 
@@ -32,6 +46,13 @@ def tests_exit(mock_print, mock_input):
 @patch('builtins.print')
 @mock_aws
 def tests_invalid_input_message(mock_print, mock_input):
+    """
+    Given:
+    Function is first invoked and user inputs invalid character
+
+    Returns:
+    Correct invalid input message is printed
+    """
     password_manager()
     mock_input.assert_called_with(
         "Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or "
@@ -46,6 +67,13 @@ def tests_invalid_input_message(mock_print, mock_input):
                                       "bidenj", "Pa55word", 'x'])
 @mock_aws
 def tests_input_prompt_e(mock_input):
+    """
+    Given:
+    Function is invoked and user inputs e
+
+    Returns:
+    Correct messages are printed
+    """
     password_manager()
     mock_input.assert_has_calls(
         [call(
@@ -63,6 +91,13 @@ def tests_input_prompt_e(mock_input):
 @patch("src.password_manager.get_secret")
 @mock_aws
 def tests_input_prompt_r(mock_get_secret, mock_print, mock_input):
+    """
+    Given:
+    Function is invoked and user inputs r
+
+    Returns:
+    Correct messages are printed
+    """
     password_manager()
     mock_input.assert_has_calls(
         [call("Please specify [e]ntry, [r]etrieval, [d]eletion, "
@@ -79,6 +114,13 @@ def tests_input_prompt_r(mock_get_secret, mock_print, mock_input):
 @patch("src.password_manager.delete_secret")
 @mock_aws
 def tests_input_prompt_d(mock_delete_secret, mock_print, mock_input):
+    """
+    Given:
+    Function is invoked and user inputs d
+
+    Returns:
+    Correct messages are printed
+    """
     password_manager()
     mock_input.assert_has_calls(
         [call("Please specify [e]ntry, [r]etrieval, [d]eletion, "
@@ -94,6 +136,13 @@ def tests_input_prompt_d(mock_delete_secret, mock_print, mock_input):
 @patch("src.password_manager.list_secrets")
 @mock_aws
 def tests_input_prompt_l_functionality(mock_list_secrets, mock_input):
+    """
+    Given:
+    Function is invoked and user inputs l
+
+    Returns:
+    List secret is invoked
+    """
     password_manager()
     assert mock_list_secrets.call_count == 1
 
@@ -115,6 +164,13 @@ def tests_input_prompt_e_functionality(mock_create_secret, mock_input):
 @patch("src.password_manager.get_secret")
 @mock_aws
 def tests_input_prompt_r_functionality(mock_get_secret, mock_input):
+    """
+    Given:
+    Function is invoked and user inputs r
+
+    Returns:
+    Get secret is invoked
+    """
     password_manager()
     assert mock_get_secret.call_count == 1
 
@@ -125,5 +181,12 @@ def tests_input_prompt_r_functionality(mock_get_secret, mock_input):
 @patch("src.password_manager.delete_secret")
 @mock_aws
 def tests_input_prompt_d_functionality(mock_delete_secret, mock_input):
+    """
+    Given:
+    Function is invoked and user inputs d
+
+    Returns:
+    Delete secret is invoked
+    """
     password_manager()
     assert mock_delete_secret.call_count == 1

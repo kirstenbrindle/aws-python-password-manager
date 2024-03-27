@@ -10,6 +10,15 @@ import json
 @pytest.mark.it("tests it deletes given secret when only one secret stored")
 @mock_aws
 def test_deletes_secret():
+    """
+    Given:
+    A valid Secrets Manager client and valid secret name when only
+    one secret stored
+
+    Returns:
+    After function is invoked, secret with that name raises Exception
+    as no longer exists
+    """
     secrets = boto3.client('secretsmanager')
     secret_string = {
         "UserId": "bidenj",
@@ -37,6 +46,15 @@ def test_deletes_secret():
 @pytest.mark.it("tests it deletes given secret when mutiple secrets stored")
 @mock_aws
 def test_deletes_secret_when_mutiple():
+    """
+    Given:
+    A valid Secrets Manager client and valid secret name when multiple secrets
+    are stored
+
+    Returns:
+    After function is invoked, secret with that name has key of DeletedDate
+    in list secrets response
+    """
     secrets = boto3.client('secretsmanager')
     secret_string = {
         "UserId": "bidenj",
@@ -74,6 +92,14 @@ def test_deletes_secret_when_mutiple():
 @patch("builtins.print")
 @mock_aws
 def test_user_does_not_have_secret_with_this_name(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client and secret name that does not exist
+
+    Returns:
+    Correct print message to inform user that a secret with that name does
+    not exist
+    """
     secrets = boto3.client('secretsmanager')
     delete_secret(secrets, 'NEW_Missile_Launch_Codes')
     mock_print.assert_called_with(
@@ -85,6 +111,14 @@ def test_user_does_not_have_secret_with_this_name(mock_print):
 @patch("builtins.print")
 @mock_aws
 def test_invalid_name(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client and invalid secret name
+
+    Returns:
+    Correct print message to inform user that a secret with that name does
+    not exist
+    """
     secrets = boto3.client('secretsmanager')
     delete_secret(secrets, '!$*&(){£$%£}')
     mock_print.assert_called_with(

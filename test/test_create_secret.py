@@ -10,6 +10,13 @@ import json
 @pytest.mark.it("test user secret is stored")
 @mock_aws
 def test_user_secret_is_stored():
+    """
+    Given:
+    A valid Secrets Manager client, secret name, user id and password
+
+    Returns:
+    Correct user id and password are stored in Secrets Manager
+    """
     secrets = boto3.client('secretsmanager')
     secret_name = 'Missile_Launch_Codes'
     user_id = 'bidenj'
@@ -29,6 +36,15 @@ def test_user_secret_is_stored():
 @patch("builtins.print")
 @mock_aws
 def test_user_does_not_already_have_secret_with_this_name(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client, secret name that already exists,
+    user id and password
+
+    Returns:
+    Correct print message to inform user that a secret with that name
+    already exists
+    """
     secrets = boto3.client('secretsmanager')
     secret_name = 'Missile_Launch_Codes'
     user_id = 'bidenj'
@@ -40,16 +56,17 @@ def test_user_does_not_already_have_secret_with_this_name(mock_print):
         "A secret with this name already exists, start again!")
 
 
-'''These last two tests have highlighted that mock_aws does not behave
+'''
+These last two tests have highlighted that mock_aws does not behave
 in the same way as AWS in all cases:
 
-    AWS Secrets Manager will inform the user that a secret cannot be created
-    if a secret with that name is scheduled for deletion, but mock_aws
-    would show the message that a secret with that name already exists.
+AWS Secrets Manager will inform the user that a secret cannot be created
+if a secret with that name is scheduled for deletion, but mock_aws
+would show the message that a secret with that name already exists.
 
-    Also AWS Secrets Manager will not let the user create a secret with
-    invalid characters (valid characters are alphanumeric characters, or
-    any of the following: -/_+=.@!) but mock_aws will allow this.
+Also AWS Secrets Manager will not let the user create a secret with
+invalid characters (valid characters are alphanumeric characters, or
+any of the following: -/_+=.@!) but mock_aws will allow this.
 '''
 
 
@@ -58,6 +75,15 @@ in the same way as AWS in all cases:
 @patch("builtins.print")
 @mock_aws
 def test_user_does_not_already_have_secret_staged_for_deletion(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client, a secret name that has just been deleted,
+    user id and password
+
+    Returns:
+    Correct print message to inform user that a secret with that name
+    is already scheduled for deletion
+    """
     secrets = boto3.client('secretsmanager')
     secret_name = 'Missile_Launch_Codes'
     user_id = 'bidenj'
@@ -77,6 +103,14 @@ def test_user_does_not_already_have_secret_staged_for_deletion(mock_print):
 @patch("builtins.print")
 @mock_aws
 def test_invalid_name(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client, a secret name containing invalid
+    characters, user id and password
+
+    Returns:
+    Correct print message to inform user that the secret name is invalid
+    """
     secrets = boto3.client('secretsmanager')
     secret_name = '!$*&(){£$%£}'
     user_id = 'bidenj'

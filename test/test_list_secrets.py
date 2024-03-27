@@ -11,6 +11,13 @@ import json
 @mock_aws
 @patch('builtins.print')
 def test_one_secret(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client and one secret is stored
+
+    Returns:
+    Print message with correct number of secrets and secret name
+    """
     secrets = boto3.client('secretsmanager')
     secret_string = {
         "UserId": "bidenj",
@@ -31,6 +38,13 @@ def test_one_secret(mock_print):
 @mock_aws
 @patch('builtins.print')
 def test_mutiple_secrets(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client and multiple secrets are stored
+
+    Returns:
+    Print message with correct number of secrets and secret name
+    """
     secrets = boto3.client('secretsmanager')
     secret_string = {
         "UserId": "bidenj",
@@ -61,6 +75,13 @@ def test_mutiple_secrets(mock_print):
 @mock_aws
 @patch('builtins.print')
 def test_no_secrets(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client and no secrets stored
+
+    Returns:
+    Print message with correct number of secrets
+    """
     secrets = boto3.client('secretsmanager')
     list_secrets(secrets)
     mock_print.assert_called_with("0 secret(s) available")

@@ -11,6 +11,13 @@ import os
 @pytest.mark.it("makes file with correct name")
 @mock_aws
 def test_file_with_correct_name_has_been_created():
+    """
+    Given:
+    A valid Secrets Manager client and valid secret name
+
+    Returns:
+    Correct secrets file has been created
+    """
     secrets = boto3.client('secretsmanager')
     secret_string = {
         "UserId": "bidenj",
@@ -30,6 +37,13 @@ def test_file_with_correct_name_has_been_created():
 @pytest.mark.it("secrets file contains correct secret data")
 @mock_aws
 def test_file_with_correct_secret_data_has_been_created():
+    """
+    Given:
+    A valid Secrets Manager client and valid secret name
+
+    Returns:
+    Correct secret data is stored in secrets.txt file
+    """
     secrets = boto3.client('secretsmanager')
     secret_string = {
         "UserId": "bidenj",
@@ -52,6 +66,13 @@ def test_file_with_correct_secret_data_has_been_created():
 @pytest.mark.it("function overwrites secret in file when new one retrieved")
 @mock_aws
 def test_overwrites_previous():
+    """
+    Given:
+    A valid Secrets Manager client and valid secret name
+
+    Returns:
+    Correct secret data has overwritten previous secret data in secrets.txt
+    """
     secrets = boto3.client('secretsmanager')
     secret_string = {
         "UserId": "bidenj",
@@ -91,6 +112,13 @@ def test_overwrites_previous():
 @patch("builtins.print")
 @mock_aws
 def test_secret_does_not_exist(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client and secret name that does not exist
+
+    Returns:
+    Correct print message to inform user that secret does not exist
+    """
     secrets = boto3.client('secretsmanager')
     get_secret(secrets, 'NEW_Missile_Launch_Codes')
     mock_print.assert_called_with(
@@ -102,6 +130,13 @@ def test_secret_does_not_exist(mock_print):
 @patch("builtins.print")
 @mock_aws
 def test_user_has_deleted_this_secret(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client and secret name that has just been deleted
+
+    Returns:
+    Correct print message to inform user that secret does not exist
+    """
     secrets = boto3.client('secretsmanager')
     secret_string = {
         "UserId": "bidenj",
@@ -125,6 +160,13 @@ def test_user_has_deleted_this_secret(mock_print):
 @patch("builtins.print")
 @mock_aws
 def test_invalid_name(mock_print):
+    """
+    Given:
+    A valid Secrets Manager client and invalid secret name
+
+    Returns:
+    Correct print message to inform user that secret does not exist
+    """
     secrets = boto3.client('secretsmanager')
     get_secret(secrets, '!$*&(){£$%£}')
     mock_print.assert_called_with(
